@@ -1,4 +1,4 @@
-# MAG Airport System (Starter Kit)
+# MAG Airport System
 
 This repo contains a Node.js backend, a Python microservice for delay prediction, and PostgreSQL database — all containerized with Docker Compose.
 
