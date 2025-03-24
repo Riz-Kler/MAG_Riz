@@ -1,0 +1,11 @@
+# Node
+node_modules/
+dist/
+.env
+
+# Python
+__pycache__/
+*.pyc
+
+# Docker volumes (optional)
+pgdata/
