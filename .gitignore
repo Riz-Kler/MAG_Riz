@@ -19,3 +19,6 @@ logs/
 .DS_Store
 Thumbs.db
 *.swp
+
+# drawio files
+*.dtmp
