@@ -1,0 +1,9 @@
+version: "3.9"
+
+services:
+  backend:
+    volumes:
+      - ./backend:/app
+    command: ["npx", "ts-node-dev", "--respawn", "src/index.ts"]
+    environment:
+      - NODE_ENV=development
