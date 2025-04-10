@@ -9,7 +9,7 @@ spark = SparkSession.builder \
 # Simulated passenger data
 data = [
     ("Alice Smith", "alice@example.com", "FlightA", "2025-04-10"),
-    ("TOm Jones", "bob@example.com", "FlightB", "2025-04-10"),
+    ("Bob Jones", "bob@example.com", "FlightB", "2025-04-10"),
     ("Charlie Doe", "charlie@example.com", "FlightC", "2025-04-11"),
     ("Alice Smith", "alice@example.com", "FlightD", "2025-04-12"),
 	("Eve Listener", "eve@example.com", "FlightE", "2025-04-12"),
