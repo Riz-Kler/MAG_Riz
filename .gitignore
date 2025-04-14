@@ -1,24 +1,60 @@
-# Node
+# --- Node ---
 node_modules/
 dist/
-.env
-
-# Python
-__pycache__/
-*.pyc
-
-# Docker volumes (optional)
-pgdata/
-db/*.sql~
-
-# Logs
-logs/
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# OS & editor files
+# --- Python ---
+__pycache__/
+*.py[cod]
+env/
+.venv/
+venv/
+ENV/
+
+# --- Spark ---
+spark-warehouse/
+.metastore_db/
+tmp/
+temp/
+
+# --- Docker ---
+*.pid
+*.tar
+*.log
+*.bak
+*.tmp
+.docker/
+docker-compose.override.yml
+.dockerignore
+
+# --- VSCode ---
+.vscode/
+.history/
+
+# --- OS ---
+.*.swp
 .DS_Store
 Thumbs.db
-*.swp
 
-# drawio files
-*.dtmp
+# --- Env Files ---
+.env
+*.env
+
+# --- Draw.io / Diagrams ---
+*.drawio.bak
+
+# --- Jupyter (if applicable) ---
+.ipynb_checkpoints/
+
+# --- Logs ---
+logs/
+*.out
+
+# Draw.io temp files
+*.drawio.dtmp
+*.drawio.bak
+*.drawio~*
+

@@ -18,3 +18,38 @@ docker-compose up --build
 - PostgreSQL
 - Docker Compose
 - Jest for testing
+
+0# MAG_Riz Airport Medallion Pipeline ✈️
+
+A simulated data lakehouse architecture using **Azure Databricks, PySpark, Delta Lake**, and **Azure Storage**.  
+It models passenger journeys between 3 UK airports (MAN, STN, BHX) using the **Bronze → Silver → Gold** medallion pattern.
+
+## Architecture
+
+- **Bronze Layer**: Raw flight data ingested from CSV → Delta
+- **Silver Layer**: Filtered to retain only 3-airport journeys
+- **Gold Layer**: (Planned) Aggregated insights for analysis
+
+## Technologies Used
+
+- 🔹 Azure Databricks
+- 🔹 Delta Lake (Bronze, Silver, Gold)
+- 🔹 PySpark & SQL
+- 🔹 Azure Data Lake (ADLS Gen2)
+- 🔹 GitHub + Markdown Documentation
+
+## Current Status
+
+✅ Bronze and Silver implemented  
+🟨 Gold layer + ADF pipeline orchestration planned  
+🧪 Testing limited due to Azure quota — pipeline logic verified via notebook mockups
+
+## Notebooks
+
+- `01_Bronze_Layer.py`: Ingests raw trip CSV, writes to Bronze
+- `02_Silver_Layer.py`: Filters for valid airport routes, outputs to Silver
+- `03_Gold_Layer.py`: Coming soon!
+
+## Demo Users
+
+- **Alice**, **Bob**, **Eve**, **Riz** simulate realistic passenger trips.

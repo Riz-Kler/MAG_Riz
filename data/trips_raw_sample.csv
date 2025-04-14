@@ -1,0 +1,5 @@
+trip_id,user,origin,destination,departure_time,arrival_time,ticket_price
+T001,Alice,MAN,BHX,2025-04-10 08:00:00,2025-04-10 09:00:00,72.5
+T002,Bob,STN,MAN,2025-04-10 14:30:00,2025-04-10 15:45:00,55.0
+T003,Eve,BHX,STN,2025-04-11 10:15:00,2025-04-11 11:25:00,60.0
+T004,Riz,MAN,STN,2025-04-11 18:00:00,2025-04-11 19:05:00,68.0
