@@ -41,7 +41,7 @@ It models passenger journeys between 3 UK airports (MAN, STN, BHX) using the **B
 ## Current Status
 
 ✅ Bronze and Silver implemented  
-🟨 Gold layer + ADF pipeline orchestration planned  
+🟨 Gold layer working with price metrics + ADF pipeline orchestration planned  
 🧪 Testing limited due to Azure quota — pipeline logic verified via notebook mockups
 
 ## Notebooks
@@ -53,3 +53,19 @@ It models passenger journeys between 3 UK airports (MAN, STN, BHX) using the **B
 ## Demo Users
 
 - **Alice**, **Bob**, **Eve**, **Riz** simulate realistic passenger trips.
+
+## TODO
+
+Replace sample data with realistic airline test datasets
+
+Full ADF pipeline orchestration for each layer
+
+Add Delta Live Tables (DLT) support (optional)
+
+Use Secrets API or Databricks-backed secret scopes
+
+CI/CD with GitHub Actions
+
+Add performance benchmarking (vs Parquet or CSV)
+
+Support for new UK/EU airport expansions
