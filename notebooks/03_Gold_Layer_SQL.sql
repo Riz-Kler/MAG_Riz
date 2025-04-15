@@ -2,11 +2,8 @@
 CREATE OR REPLACE TEMP VIEW silver_trips AS
 SELECT * FROM delta.`/mnt/airportdata/silver/trips`;
 
--- Aggregate by route
-CREATE OR REPLACE TABLE gold_route_counts
-USING DELTA
-LOCATION '/mnt/airportdata/gold/route_counts'
-AS
+-- Aggregate Gold Metrics
+CREATE OR REPLACE TEMP VIEW gold_route_counts AS
 SELECT
   origin,
   destination,

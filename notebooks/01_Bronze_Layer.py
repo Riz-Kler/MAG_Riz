@@ -2,6 +2,9 @@
 
 from pyspark.sql.functions import current_timestamp
 
+# Step 0 - Clear out Bronze folder
+dbutils.fs.rm("/mnt/airportdata/bronze/trips", recurse=True)
+
 # Step 1: Load raw CSV from storage (with header + infer schema)
 df_raw = (
     spark.read
@@ -17,7 +20,7 @@ df_raw = df_raw.withColumn("ingest_ts", current_timestamp())
 df_raw.write.format("delta").mode("overwrite").save("/mnt/airportdata/bronze/trips")
 
 # Step 4: Register Delta table for SQL
-spark.sql("CREATE TABLE IF NOT EXISTS bronze_trips USING DELTA LOCATION '/mnt/airportdata/bronze/trips'")
+df_raw.createOrReplaceTempView("bronze_view")
 
 # Step 5: Create a temp view for quick exploration
 df_raw.createOrReplaceTempView("bronze_view")

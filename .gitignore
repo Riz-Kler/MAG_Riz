@@ -9,10 +9,7 @@ yarn-error.log*
 # --- Python ---
 __pycache__/
 *.py[cod]
-env/
-.venv/
-venv/
-ENV/
+
 
 # --- Spark ---
 spark-warehouse/
@@ -42,6 +39,10 @@ Thumbs.db
 # --- Env Files ---
 .env
 *.env
+.venv/
+venv/
+ENV/
+env/
 
 # --- Draw.io / Diagrams ---
 *.drawio.bak
@@ -58,3 +59,46 @@ logs/
 *.drawio.bak
 *.drawio~*
 
+# Ignore notebooks' checkpoints
+**/.ipynb_checkpoints/
+
+# Ignore Databricks secrets or mount files with real credentials
+scripts/mount_storage.py
+
+# Databricks secrets and tokens
+*.dbc
+*.dbc-config
+*.token
+.databricks/
+*.dbc.json
+databricks*.log
+
+.databricks/
+.databricks-connect
+
+
+# Local system & Python files
+__pycache__/
+*.pyc
+*.pyo
+*.DS_Store
+.env
+*.log
+
+# Databricks mounts and secret scopes
+/dbfs/mnt/*
+
+
+# Ignore environment and system files
+.env
+*.log
+*.pyc
+__pycache__/
+.DS_Store
+
+# Ignore token or credential files
+*.pem
+*.key
+*.json
+*.env
+token.txt
