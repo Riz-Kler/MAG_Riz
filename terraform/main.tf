@@ -1,2 +1,13 @@
-# Placeholder so plan works even before you add AWS creds
+terraform {
+  required_version = ">= 1.5.0"
+  required_providers {
+    aws = { source = "hashicorp/aws", version = "~> 5.0" }
+  }
+}
+
+provider "aws" {
+  region = var.aws_region
+}
+
+# harmless placeholder so plan shows "1 to add"
 resource "null_resource" "ping" {}
