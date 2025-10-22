@@ -69,3 +69,6 @@ CI/CD with GitHub Actions
 Add performance benchmarking (vs Parquet or CSV)
 
 Support for new UK/EU airport expansions
+
+**Update (Oct 2025):** Terraform IaC structure cleaned and validated in `terraform/`. 
+Older configs archived in `terraform_old/`. AWS resources will be reintroduced next phase.

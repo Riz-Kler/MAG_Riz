@@ -102,3 +102,10 @@ __pycache__/
 *.json
 *.env
 token.txt
+
+**/.terraform/
+**/.terraform.lock.hcl
+**/terraform.tfstate
+**/terraform.tfstate.backup
+**/*.tfvars
+
