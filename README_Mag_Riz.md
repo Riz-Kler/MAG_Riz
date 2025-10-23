@@ -119,15 +119,15 @@ docker compose ps
 docker compose logs -f zookeeper
 docker compose logs -f kafka
 
-## ELK Stack /MAG_Riz ##
+## ELK Stack /MAG_Riz/observability ##
 
 docker compose down
-docker compose -f observability/docker-compose.yml up -d
+docker compose -f docker-compose.yml up -d
 
-# view logstash
+# view logstash /MAG_Riz/observability
 
-docker compose -f observability/docker-compose.yml ps
-docker compose -f observability/docker-compose.yml logs -f logstash
+docker compose -f docker-compose.yml ps
+docker compose -f docker-compose.yml logs -f logstash
 
 
 ## 🌐 AWS Deployment Plan

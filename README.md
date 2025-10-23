@@ -2,7 +2,7 @@
 
 This repo contains a Node.js backend, a Python microservice for delay prediction, and PostgreSQL database — all containerized with Docker Compose.
 
-# Quick Start
+## Quick Start /MAG_Riz ##
 
 docker compose down
 docker compose pull
@@ -14,7 +14,15 @@ docker compose ps
 docker compose logs -f zookeeper
 docker compose logs -f kafka
 
+## ELK Stack /MAG_Riz/observability ##
 
+docker compose down
+docker compose -f docker-compose.yml up -d
+
+# view logstash /MAG_Riz/observability
+
+docker compose -f docker-compose.yml ps
+docker compose -f docker-compose.yml logs -f logstash
 
 ## Getting Started
 
