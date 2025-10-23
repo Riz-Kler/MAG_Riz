@@ -1,3 +1,18 @@
+> 🌐 Designed and maintained by **Rizwan Kler** — demonstrating end-to-end DevOps & Site Reliability Engineering on AWS.
+
+## ✈️ MAG_Riz – Cloud-Native Airport Operations Architecture
+
+**MAG_Riz** is a real-world simulation of a cloud-based airport management system, designed to demonstrate full-stack Site Reliability Engineering and DevOps principles.  
+It showcases an **AWS-provisioned infrastructure (Terraform IaC)** with secure networking (private/public subnets, IAM, Security Groups, NACLs), **GDPR-compliant data flows**, and **real-time flight events** via Kafka.  
+
+Key integrations include:
+- **Terraform (IaC):** Builds VPC, RDS, ECS, S3, and CloudWatch alarms for DB CPU utilisation.  
+- **NiFi & Kafka:** Ingest, transform, and pseudonymise event data before storage or ELK indexing.  
+- **ELK Stack:** Centralised observability — logs, metrics, and dashboards for error rate and latency.  
+- **SonarQube & CI/CD:** Continuous Integration quality gates for clean, secure code delivery.  
+
+This project was developed as part of my Site Reliability Engineer interview preparation and refined into a reusable architecture reference for **cloud automation, data reliability, and security compliance**.
+#
 # ✈️ MAG Airport System – Developer Showcase Project by Rizwan Kler
 
 > A modern, containerized microservice system built around realistic airport operations — inspired by the MAG Software Developer role. Designed with scalability, fault-tolerance, and cloud-readiness in mind.
@@ -27,7 +42,7 @@ This project simulates key airport services:
 
 ---
 
-## 🧰 Tech Stack
+## 🧰 Tech Stack (initial)
 
 | Component        | Technology                     |
 |------------------|--------------------------------|
@@ -44,19 +59,35 @@ This project simulates key airport services:
 
 ```
 MAG_Riz/
-├── backend/           # Node.js + TypeScript backend API
-│   ├── src/
-│   ├── tests/
-│   ├── Dockerfile
-│   ├── tsconfig.json
-│   └── package.json
-├── python-service/    # Flask microservice
-│   ├── app.py
-│   └── Dockerfile
-├── db/                # SQL init script for PostgreSQL
-│   └── init.sql
-├── docker-compose.yml
-└── README.md
+│
+├── README.md                     # Short project overview
+│
+├── architecture/
+│   ├── MAG_Airport_AWS_Architecture_Diagram_RizKler_4.drawio
+│   └── notes-security-layers.md  # optional notes or the comment you wrote
+│
+├── terraform/
+│   ├── versions.tf
+│   ├── provider.tf
+│   ├── vpc.tf
+│   ├── security.tf
+│   ├── rds-subnet.tf
+│   ├── rds.tf
+│   ├── alarms.tf
+│   └── variables.tf
+│
+├── nifi/
+│   ├── kafka_to_s3_flow.xml      # or export as .json if using NiFi Registry
+│   └── readme-nifi-flow.md       # short summary of flow and controller services
+│
+├── ci-cd/
+│   ├── .gitlab-ci.yml            # or Jenkinsfile if that’s what you’ll demo
+│   ├── sonar-project.properties
+│   ├── tfsec.yml (optional)
+│   └── quality-gate-notes.md
+│
+└── scripts/
+    └── helper-scripts.sh         # placeholder for any bash automation or tf wrapper
 ```
 
 ---

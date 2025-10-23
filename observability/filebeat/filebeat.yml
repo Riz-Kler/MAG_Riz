@@ -1,0 +1,12 @@
+filebeat.inputs:
+  - type: filestream
+    id: app-logs
+    paths: ["/var/log/app/*.log"]
+    fields:
+      service: "magriz-api"     # or for eaglebank-api
+      env: "dev"
+    fields_under_root: true
+    parsers: [{ndjson: {}}]     # if your logs are JSON lines
+
+output.logstash:
+  hosts: ["localhost:5044"]
