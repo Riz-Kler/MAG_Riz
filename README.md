@@ -2,6 +2,20 @@
 
 This repo contains a Node.js backend, a Python microservice for delay prediction, and PostgreSQL database — all containerized with Docker Compose.
 
+# Quick Start
+
+docker compose down
+docker compose pull
+docker compose up -d
+docker compose ps
+
+# check logs
+
+docker compose logs -f zookeeper
+docker compose logs -f kafka
+
+
+
 ## Getting Started
 
 ```bash
@@ -76,3 +90,12 @@ Older configs archived in `terraform_old/`. AWS resources will be reintroduced n
 terraform_old reintroduced
 
 This repo demonstrates Terraform IaC, NiFi data flows, and AWS architecture design for the MAG_Riz system — created as part of recent interview preparation.
+
+### 🔄 Recent Updates
+- Refactored Docker Compose configuration to replace deprecated Bitnami images.
+- Pinned stable versions:
+  - Confluent Kafka/Zookeeper 7.6.1
+  - Postgres 15
+  - Spark 3.5.2
+- Validated full stack startup and removed obsolete Docker warnings.
+

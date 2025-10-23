@@ -87,7 +87,7 @@ MAG_Riz/
 │   └── quality-gate-notes.md
 │
 └── scripts/
-    └── helper-scripts.sh         # placeholder for any bash automation or tf wrapper
+    └── helper-scripts.sh         # placeholder for any bash automation or tf wrapper ## TO DO ##
 ```
 
 ---
@@ -100,6 +100,19 @@ MAG_Riz/
 ```bash
 docker compose up --build
 ```
+
+# Quick Start
+
+docker compose down
+docker compose pull
+docker compose up -d
+docker compose ps
+
+# check logs
+
+docker compose logs -f zookeeper
+docker compose logs -f kafka
+
 
 Services will be available at:
 
@@ -160,5 +173,14 @@ Returns:
 A developer passionate about smart, cloud-ready systems that solve real problems. This project was built out of genuine interest and excitement for the opportunity to contribute to MAG’s digital transformation journey.
 
 📅 March 24, 2025
+
+### 🔄 Recent Updates
+- Refactored Docker Compose configuration to replace deprecated Bitnami images.
+- Pinned stable versions:
+  - Confluent Kafka/Zookeeper 7.6.1
+  - Postgres 15
+  - Spark 3.5.2
+- Validated full stack startup and removed obsolete Docker warnings.
+
 
 ---
