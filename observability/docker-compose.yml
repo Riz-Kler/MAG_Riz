@@ -1,23 +1,43 @@
 version: "3.8"
+
 services:
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.15.3
+    container_name: es
     environment:
       - discovery.type=single-node
-      - xpack.security.enabled=false   # enable & add users later for prod
+      - xpack.security.enabled=false      # demo only; enable for prod
       - ES_JAVA_OPTS=-Xms1g -Xmx1g
     ports: ["9200:9200"]
+    networks: [elk]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9200/_cluster/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+
   kibana:
     image: docker.elastic.co/kibana/kibana:8.15.3
+    container_name: kib
     environment:
       - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
     ports: ["5601:5601"]
     depends_on: [elasticsearch]
+    networks: [elk]
+
   logstash:
     image: docker.elastic.co/logstash/logstash:8.15.3
-    volumes:
-      - ./logstash/pipelines:/usr/share/logstash/pipeline
+    container_name: ls
     environment:
       - LS_JAVA_OPTS=-Xms512m -Xmx512m
-    ports: ["5044:5044","5001:5001"]
+    ports:
+      - "5044:5044"     # Beats input (Filebeat)
+      - "5001:5001"     # Optional JSON over TCP
+    volumes:
+      - ./logstash/pipelines:/usr/share/logstash/pipeline
     depends_on: [elasticsearch]
+    networks: [elk]
+
+networks:
+  elk:
+    driver: bridge

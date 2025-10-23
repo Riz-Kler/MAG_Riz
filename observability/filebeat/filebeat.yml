@@ -1,12 +1,43 @@
+########################
+# Filebeat Configuration
+########################
+
 filebeat.inputs:
   - type: filestream
-    id: app-logs
-    paths: ["/var/log/app/*.log"]
+    id: magriz-app-logs
+    enabled: true
+    paths:
+      - /var/log/magriz/*.log     # adjust for your container or service path
     fields:
-      service: "magriz-api"     # or for eaglebank-api
-      env: "dev"
+      service: magriz-api
+      env: dev
     fields_under_root: true
-    parsers: [{ndjson: {}}]     # if your logs are JSON lines
+    parsers:
+      - ndjson:
+          add_error_key: true
 
+# ============================== Outputs ===============================
+
+# Option A: Send logs directly to Logstash (recommended)
 output.logstash:
   hosts: ["localhost:5044"]
+
+# Option B: (If no Logstash) send directly to Elasticsearch/OpenSearch
+# output.elasticsearch:
+#   hosts: ["http://localhost:9200"]
+#   index: "logs-magriz-%{+yyyy.MM.dd}"
+
+# ============================== Logging ===============================
+logging:
+  level: info
+  to_files: true
+  files:
+    path: /var/log/filebeat
+    name: filebeat
+    keepfiles: 7
+    permissions: 0644
+
+# ============================== Monitoring ===============================
+monitoring.enabled: true
+setup.template.settings:
+  index.number_of_shards: 1

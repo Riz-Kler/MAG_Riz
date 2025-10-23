@@ -73,4 +73,6 @@ Support for new UK/EU airport expansions
 **Update (Oct 2025):** Terraform IaC structure cleaned and validated in `terraform/`. 
 Older configs archived in `terraform_old/`. AWS resources will be reintroduced next phase.
 
+terraform_old reintroduced
+
 This repo demonstrates Terraform IaC, NiFi data flows, and AWS architecture design for the MAG_Riz system — created as part of recent interview preparation.
