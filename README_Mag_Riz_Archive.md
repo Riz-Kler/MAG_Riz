@@ -92,7 +92,7 @@ MAG_Riz/
 
 ---
 
-## ⚙️ Running Locally (Dev Environment)
+## ⚙️ Running Locally (Dev Environment) /MAG_Riz/backend
 
 1. Ensure Docker is installed and running
 2. From project root:
@@ -121,7 +121,6 @@ docker compose logs -f kafka
 
 ## ELK Stack /MAG_Riz/observability ##
 
-docker compose down
 docker compose -f docker-compose.yml up -d
 
 # view logstash /MAG_Riz/observability
