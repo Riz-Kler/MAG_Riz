@@ -100,8 +100,14 @@ MAG_Riz/
 ```bash
 docker compose up --build
 ```
+Services will be available at:
 
-# Quick Start
+- Backend API: `http://localhost:3000/api/passengers`
+- Delay Predictor: `http://localhost:5000/predict-delay`
+
+---
+
+## Quick Start /MAG_Riz ##
 
 docker compose down
 docker compose pull
@@ -113,13 +119,16 @@ docker compose ps
 docker compose logs -f zookeeper
 docker compose logs -f kafka
 
+## ELK Stack /MAG_Riz ##
 
-Services will be available at:
+docker compose down
+docker compose -f observability/docker-compose.yml up -d
 
-- Backend API: `http://localhost:3000/api/passengers`
-- Delay Predictor: `http://localhost:5000/predict-delay`
+# view logstash
 
----
+docker compose -f observability/docker-compose.yml ps
+docker compose -f observability/docker-compose.yml logs -f logstash
+
 
 ## 🌐 AWS Deployment Plan
 
