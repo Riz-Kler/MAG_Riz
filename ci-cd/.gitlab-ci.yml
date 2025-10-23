@@ -1,0 +1,29 @@
+stages: [install, test, sonar]
+
+variables:
+  SONAR_HOST_URL: "https://sonar.mycompany.local"
+  SONAR_LOGIN: "${SONAR_TOKEN}"
+
+install:
+  image: node:20
+  script:
+    - npm ci
+  artifacts:
+    paths: [node_modules/]
+
+test:
+  image: node:20
+  script:
+    - npm run test -- --coverage
+  artifacts:
+    paths: [coverage/]
+
+sonarqube:
+  image: sonarsource/sonar-scanner-cli:latest
+  stage: sonar
+  dependencies: [test]
+  script:
+    - sonar-scanner -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_LOGIN
+  only:
+    - merge_requests
+    - main

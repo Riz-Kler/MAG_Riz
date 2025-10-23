@@ -2,6 +2,10 @@ from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
+@app.get("/health")
+def health():
+    return {"status": "ok"}
+    
 @app.route('/predict-delay', methods=['POST'])
 def predict_delay():
     data = request.get_json()
