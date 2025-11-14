@@ -1,0 +1,7 @@
+s3.bucket     = "mag-riz-events"
+s3.key        = ${schema.name}/${now():format("yyyy/MM/dd/HH")}/${kafka.topic}/${uuid()}.json
+
+Bucket           : ${s3.bucket}
+Object Key       : ${s3.key}
+Content-Type     : ${content.type}
+Endpoint Override: (empty if using AWS default)

@@ -1,0 +1,18 @@
+services:
+  api:
+    build: .
+    ports: ["5000:5000"]
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: "kafka:9093"
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: mag
+      DB_PASSWORD: magpass
+      DB_NAME: magdb
+    networks:
+      - mag_riz_net
+
+networks:
+  mag_riz_net:
+    external: true
+    name: mag_riz_default
