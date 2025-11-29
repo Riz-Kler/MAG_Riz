@@ -1,0 +1,41 @@
+name: Build & Deploy Checkin Service
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - "services/checkin/**"
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: eu-west-2
+
+      - name: Login to ECR
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build image
+        run: |
+          cd services/checkin
+          docker build -t checkin:${{ github.sha }} .
+
+      - name: Tag & push
+        run: |
+          REPO="${{ secrets.ECR_REPO_CHECKIN }}"
+          docker tag checkin:${{ github.sha }} $REPO:${{ github.sha }}
+          docker push $REPO:${{ github.sha }}
+
+      - name: Update ECS service
+        run: |
+          aws ecs update-service \
+            --cluster magriz-ecs \
+            --service checkin-service \
+            --force-new-deployment
