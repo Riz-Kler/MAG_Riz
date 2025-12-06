@@ -388,7 +388,30 @@ Returns:
 
 ✅ Local version working  
 ✅ Architecture mapped for ECS/RDS  
-🔜 Next: Deploy backend to ECS and connect to RDS
+✅ Deployed backend to ECS and connected to RDS
+
+## 📱 Next Phase – Mobile Check-In & Reservations
+
+The next milestone for **MAG_Riz** is a mobile-friendly check-in and reservations experience that runs on top of the existing backend, Kafka events, and AWS IaC.
+
+### Mobile App Approach
+
+- **Frontend:** Responsive React SPA (or PWA) served via **S3 + CloudFront**, optimised for mobile browsers so it can be demoed directly on a phone.
+- **Auth:** OAuth2/OIDC sign-in using **Amazon Cognito / Microsoft Entra ID**, issuing JWTs.
+- **Edge Security:** Internet traffic terminates at an **AWS ALB with OIDC authentication**. Only validated JWT traffic is forwarded to private ECS services.
+- **Backend Flow:**
+  - `POST /reservations` – create a reservation in **Aurora/RDS**
+  - `GET /reservations/{id}` – retrieve reservation details
+  - Optional: publish `ReservationCreated` events to **Kafka** for downstream processing.
+
+### Observability & SRE Hooks
+
+- **CloudWatch Logs:** ECS tasks and ALB send structured logs (including `reservationId`, `userId`, `flightId`) to dedicated log groups to trace bookings end-to-end.
+- **CloudWatch Metrics:** Custom metrics such as `ReservationsCreated` and `ReservationsFailed` to monitor booking success rates.
+- **(Planned) Tracing:** AWS X-Ray / ADOT to visualise the full path:
+  `Client → CloudFront → ALB → ECS (check-in service) → RDS/Kafka`.
+
+This mobile layer will sit on top of the existing Docker, Kafka, Postgres, Spark, and Terraform stack, turning MAG_Riz into a fully demonstrable, cloud-native airport system that can be exercised live from a phone during interviews or demos.
 
 ---
 
