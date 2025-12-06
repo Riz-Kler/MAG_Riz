@@ -174,7 +174,7 @@ terraform_old reintroduced
 
 This repo demonstrates Terraform IaC, NiFi data flows, and AWS architecture design for the MAG_Riz system — created as part of recent interview preparation.
 
-### 🔄 Recent Updates
+###
 - Refactored Docker Compose configuration to replace deprecated Bitnami images.
 - Pinned stable versions:
   - Confluent Kafka/Zookeeper 7.6.1
@@ -195,7 +195,7 @@ A developer passionate about smart, cloud-ready systems that solve real problems
 
 📅 March 24, 2025
 
-### 🔄 Recent Updates
+### 
 - Refactored Docker Compose configuration to replace deprecated Bitnami images.
 - Pinned stable versions:
   - Confluent Kafka/Zookeeper 7.6.1
@@ -348,6 +348,9 @@ docker compose -f docker-compose.yml logs -f logstash
 
 ## 🌐 AWS Deployment Plan
 
+📘 **Architecture Diagram**  
+See `architecture/MAG_Airport_AWS_Architecture_Diagram_RizKler_6.drawio` for the full AWS design including VPC, ALB (OIDC), ECS, Kafka, RDS, and S3.
+
 This system is built to deploy to AWS using:
 
 | AWS Service         | Role                                              |
@@ -396,15 +399,17 @@ The next milestone for **MAG_Riz** is a mobile-friendly check-in and reservation
 
 ### Mobile App Approach
 
-- **Frontend:** Responsive React SPA (or PWA) served via **S3 + CloudFront**, optimised for mobile browsers so it can be demoed directly on a phone.
+- **Frontend:** Responsive React SPA (progressive web app) deployed via S3 + CloudFront served via **S3 + CloudFront**, optimised for mobile browsers so it can be demoed directly on a phone.
 - **Auth:** OAuth2/OIDC sign-in using **Amazon Cognito / Microsoft Entra ID**, issuing JWTs.
-- **Edge Security:** Internet traffic terminates at an **AWS ALB with OIDC authentication**. Only validated JWT traffic is forwarded to private ECS services.
+- **Edge Security:** Internet traffic terminates at an **AWS ALB with OIDC authentication**. Only valid JWT-authenticated traffic is forwarded from the ALB into private ECS subnets, ensuring zero public exposure.
 - **Backend Flow:**
   - `POST /reservations` – create a reservation in **Aurora/RDS**
   - `GET /reservations/{id}` – retrieve reservation details
   - Optional: publish `ReservationCreated` events to **Kafka** for downstream processing.
 
 ### Observability & SRE Hooks
+
+- **ALB Access Logs (optional):** Can be streamed to CloudWatch or S3 for audit trails.
 
 - **CloudWatch Logs:** ECS tasks and ALB send structured logs (including `reservationId`, `userId`, `flightId`) to dedicated log groups to trace bookings end-to-end.
 - **CloudWatch Metrics:** Custom metrics such as `ReservationsCreated` and `ReservationsFailed` to monitor booking success rates.
