@@ -1,6 +1,6 @@
-variable "aws_region" {}
-variable "name" {}
-variable "vpc_cidr" {}
+######################
+# VPC
+######################
 
 # TODO: call modules here (vpc, alb, ecs-service, rds, iam)
 

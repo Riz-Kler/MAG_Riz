@@ -1,9 +1,9 @@
 terraform {
   backend "s3" {
-    bucket         = "magriz-tf-state-dev"
-    key            = "envs/dev/terraform.tfstate"
+    bucket         = "magriz-terraform-state-dev"  # change
+    key            = "dev/terraform.tfstate"
     region         = "eu-west-2"
-    dynamodb_table = "magriz-tf-locks"
+    dynamodb_table = "magriz-terraform-locks"      # change
     encrypt        = true
   }
 }
