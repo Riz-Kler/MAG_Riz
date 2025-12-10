@@ -21,7 +21,7 @@ const SEATS: SeatType[] = ["Window", "Middle", "Aisle"];
 function App() {
   const [flightId, setFlightId] = useState("");
   const [passengerName, setPassengerName] = useState("");
-  const [seat, setSeat] = useState<SeatType>("Window");
+  const [seat, setSeat] = useState<SeatType | "">("");
 
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [loading, setLoading] = useState(false);
@@ -167,23 +167,30 @@ function App() {
         {/* Seat dropdown */}
         <label style={styles.label}>Seat Preference</label>
         <select
-          style={styles.input}
-          value={seat}
-          onChange={(e) => setSeat(e.target.value as SeatType)}
-          disabled={!flightId || availableSeatsForFlight.length === 0}
-        >
-          {availableSeatsForFlight.length === 0 ? (
-            <option value="">No seats available</option>
-          ) : (
-            <>
-              {availableSeatsForFlight.map((s) => (
-                <option key={s} value={s}>
-                  {s}
-                </option>
-              ))}
-            </>
-          )}
-        </select>
+  style={styles.input}
+  value={seat}
+  onChange={(e) => setSeat(e.target.value as SeatType)}
+  disabled={!flightId || availableSeatsForFlight.length === 0}
+>
+  {!flightId ? (
+    // No flight selected yet
+    <option value="">Select a seat</option>
+  ) : availableSeatsForFlight.length === 0 ? (
+    // Flight selected but no seats left
+    <option value="">No seats available</option>
+  ) : (
+    // Flight selected and seats available
+    <>
+      <option value="">Select a seat</option>
+      {availableSeatsForFlight.map((s) => (
+        <option key={s} value={s}>
+          {s}
+        </option>
+      ))}
+    </>
+  )}
+</select>
+
 
         <button style={styles.button} disabled={loading}>
           {loading ? "Checking in..." : "Check In"}
