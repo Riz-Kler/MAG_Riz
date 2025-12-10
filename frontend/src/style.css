@@ -13,6 +13,31 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.home {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
+}
+
+.hero h1 {
+  font-size: 2.4rem;
+  margin-bottom: 0.5rem;
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.action-card {
+  border-radius: 0.75rem;
+  border: 1px solid #444;
+  padding: 1.5rem;
+  text-decoration: none;
+}
+
 a {
   font-weight: 500;
   color: #646cff;

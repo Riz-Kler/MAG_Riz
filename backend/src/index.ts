@@ -1,21 +1,26 @@
 import express from "express";
-import flightRoutes from "./routes/flights";
-import passengerRoutes from "./routes/passengers";
+import cors from "cors";
+import flightsRouter from "./routes/flights";
+import reservationsRouter from "./routes/reservations";
 
 const app = express();
+
 app.use(express.json());
 
-// --- Health check ---
-app.get("/health", (_req, res) => {
-  res.status(200).json({ status: "ok" });
+// CORS so web (5173) + mobile (5174) can talk to 4000
+app.use(
+  cors({
+    origin: ["http://localhost:5173", "http://localhost:5174"],
+  })
+);
+
+app.use("/api/flights", flightsRouter);
+app.use("/api/reservations", reservationsRouter);
+
+const PORT = process.env.PORT || 4000;
+
+app.listen(PORT, () => {
+  console.log(`MAG_Riz flights API listening on port ${PORT}`);
 });
 
-// --- Routes ---
-app.use("/api/flights", flightRoutes);
-app.use("/api/passengers", passengerRoutes);
-
-// --- Server listen ---
-const PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
-app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
-
-console.log("✅ TypeScript is working!");
+export default app; // for Jest tests

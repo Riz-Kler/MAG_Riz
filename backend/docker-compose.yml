@@ -7,7 +7,7 @@ services:
       DB_HOST: postgres
       DB_PORT: 5432
       DB_USER: mag
-      DB_PASSWORD: magpass
+      DB_PASSWORD: magdb
       DB_NAME: magdb
     networks:
       - mag_riz_net
