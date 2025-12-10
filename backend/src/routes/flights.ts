@@ -1,26 +1,50 @@
-import express from "express";
-import axios from "axios";
-const router = express.Router();
+import { Router } from "express";
+import {
+  getArrivals,
+  getDepartures,
+  getCheckInView
+} from "../services/flights/flightService";
 
-router.get("/live", async (_req, res) => {
+const router = Router();
+
+// GET /api/flights/live  -> { arrivals, departures }
+router.get("/live", async (_req, res, next) => {
   try {
-    const response = await fetch("https://opensky-network.org/api/states/all");
-    const data = await response.json();
+    const [arrivals, departures] = await Promise.all([
+      getArrivals(),
+      getDepartures()
+    ]);
 
-    const manchesterICAO = "EGCC";
-
-    const arrivals = data.states.filter((f: any) => f[14] === manchesterICAO);
-    const departures = data.states.filter((f: any) => f[13] === manchesterICAO);
-
-    res.json({
-      timestamp: data.time,
-      arrivals,
-      departures,
-      total: data.states.length
-    });
+    res.json({ arrivals, departures });
   } catch (err) {
-    console.error(err);
-    res.status(500).send("Error fetching flight data");
+    next(err);
+  }
+});
+
+router.get("/arrivals", async (_req, res, next) => {
+  try {
+    const arrivals = await getArrivals();
+    res.json(arrivals);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.get("/departures", async (_req, res, next) => {
+  try {
+    const departures = await getDepartures();
+    res.json(departures);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.get("/checkin", async (_req, res, next) => {
+  try {
+    const items = await getCheckInView();
+    res.json(items);
+  } catch (err) {
+    next(err);
   }
 });
 
