@@ -1,28 +1,20 @@
 <template>
-  <div>
-    <h2>✈️ Manchester Arrivals</h2>
-    <ul>
-      <li v-for="flight in flights.arrivals" :key="flight[0]">
-        {{ flight[1] }} from {{ flight[2] }}
-      </li>
-    </ul>
+  <main class="home">
+    <section class="hero">
+      <h1>Manchester Airport Flights</h1>
+      <p>Live arrivals and departures from the MAG_Riz backend.</p>
+    </section>
 
-    <h2>🛫 Manchester Departures</h2>
-    <ul>
-      <li v-for="flight in flights.departures" :key="flight[0]">
-        {{ flight[1] }} to {{ flight[2] }}
-      </li>
-    </ul>
-  </div>
+    <section class="actions">
+      <router-link to="/arrivals" class="action-card">
+        <h2>Arrivals</h2>
+        <p>View inbound flights and latest status updates.</p>
+      </router-link>
+
+      <router-link to="/departures" class="action-card">
+        <h2>Departures</h2>
+        <p>Check outbound flights, gates and boarding status.</p>
+      </router-link>
+    </section>
+  </main>
 </template>
-
-<script setup>
-import { ref, onMounted } from "vue";
-import { getManchesterFlights } from "./services/flightService";
-
-const flights = ref({ arrivals: [], departures: [] });
-
-onMounted(async () => {
-  flights.value = await getManchesterFlights();
-});
-</script>
