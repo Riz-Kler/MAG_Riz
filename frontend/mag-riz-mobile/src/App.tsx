@@ -14,8 +14,30 @@ interface Reservation {
   created_at: string;
 }
 
-const FLIGHTS = ["MAN1001", "MAN1002", "MAN1003"];
-const PASSENGERS = ["Riz Kler", "Alice Jones", "Eve Smith"];
+const FLIGHTS = ["MAN1001", "MAN1002", "MAN1003", "MAN2001", "MAN2002",   "MAN2003", "MAN2004"];
+const PASSENGERS = [
+  "Riz Kler",
+  "Alice Jones",
+  "Eve Smith",
+  "Tom Harris",
+  "Sara Patel",
+  "Liam Brown",
+  "Olivia Shaw",
+  "Noah Clarke",
+  "Emma Wilson",
+  "Jack Turner",
+  "Mia Robinson",
+  "Ava Khan",
+  "Lucas Carter",
+  "Isla Murphy",
+  "Ethan Lewis",
+  "Leo Ahmed",
+  "Zara Ali",
+  "Hannah Green",
+  "Owen Hughes",
+  "Sophie Ward",
+];
+
 const SEATS: SeatType[] = ["Window", "Middle", "Aisle"];
 
 function App() {
@@ -129,182 +151,302 @@ function App() {
     reservations.length >= PASSENGERS.length;
 
   return (
-    <div style={styles.container}>
-      <h1 style={styles.title}>MAG Riz — Mobile Check-In</h1>
-
-      <form onSubmit={handleSubmit} style={styles.form}>
-        {/* Flight dropdown */}
-        <label style={styles.label}>Flight ID</label>
-        <select
-          style={styles.input}
-          value={flightId}
-          onChange={(e) => setFlightId(e.target.value)}
-        >
-          <option value="">Select a flight</option>
-          {FLIGHTS.map((f) => (
-            <option key={f} value={f}>
-              {f}
-            </option>
-          ))}
-        </select>
-
-        {/* Passenger dropdown */}
-        <label style={styles.label}>Passenger Name</label>
-        <select
-          style={styles.input}
-          value={passengerName}
-          onChange={(e) => setPassengerName(e.target.value)}
-          disabled={availablePassengers.length === 0}
-        >
-          <option value="">Select a passenger</option>
-          {availablePassengers.map((p) => (
-            <option key={p} value={p}>
-              {p}
-            </option>
-          ))}
-        </select>
-
-        {/* Seat dropdown */}
-        <label style={styles.label}>Seat Preference</label>
-        <select
-          style={styles.input}
-          value={seat}
-          onChange={(e) => setSeat(e.target.value as SeatType)}
-          disabled={!flightId || availableSeatsForFlight.length === 0}
-        >
-          {availableSeatsForFlight.length === 0 ? (
-            <option value="">No seats available</option>
-          ) : (
-            <>
-              {availableSeatsForFlight.map((s) => (
-                <option key={s} value={s}>
-                  {s}
-                </option>
-              ))}
-            </>
-          )}
-        </select>
-
-        <button style={styles.button} disabled={loading}>
-          {loading ? "Checking in..." : "Check In"}
-        </button>
-      </form>
-
-      {/* Status messages */}
-      {message && (
-        <div style={styles.successBox}>
-          <h3>Success</h3>
-          <p>{message}</p>
-        </div>
-      )}
-
-      {error && (
-        <div style={styles.errorBox}>
-          <h3>Error</h3>
-          <p>{error}</p>
-        </div>
-      )}
-
-      {/* Reservation table */}
-      {reservations.length > 0 && (
-        <div style={styles.tableWrapper}>
-          <h3>Current Check-Ins</h3>
-          <table style={styles.table}>
-            <thead>
-              <tr>
-                <th>Flight</th>
-                <th>Passenger</th>
-                <th>Seat</th>
-                <th>Checked In At</th>
-              </tr>
-            </thead>
-            <tbody>
-              {reservations.map((r) => (
-                <tr key={r.id}>
-                  <td>{r.flight_id}</td>
-                  <td>{r.passenger_name}</td>
-                  <td>{r.seat}</td>
-                  <td>{new Date(r.created_at).toLocaleString()}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-
-      {/* Reset button after all 3 have checked in */}
-      {allTestPassengersCheckedIn && (
-        <button
-          style={{ ...styles.button, marginTop: "16px", background: "#666" }}
-          type="button"
-          onClick={handleReset}
-          disabled={loading}
-        >
-          Reset Test Check-Ins
-        </button>
-      )}
+  <div style={styles.appShell}>
+    <div style={styles.appHeader}>
+      <div style={styles.brandBadge}>MAG Riz</div>
+      <div style={styles.headerTextBlock}>
+        <h1 style={styles.title}>Mobile Check-In</h1>
+        <p style={styles.subtitle}>Select your flight, passenger, and seat.</p>
+      </div>
     </div>
+
+    <main style={styles.main}>
+      {/* Check-in card */}
+      <section style={styles.card}>
+        <h2 style={styles.cardTitle}>Check-In</h2>
+
+        <form onSubmit={handleSubmit} style={styles.form}>
+          {/* Flight dropdown */}
+          <label style={styles.label}>Flight</label>
+          <select
+            style={styles.input}
+            value={flightId}
+            onChange={(e) => {
+              setFlightId(e.target.value);
+              setSeat(""); // reset seat on flight change
+            }}
+          >
+            <option value="">Select a flight</option>
+            {FLIGHTS.map((f) => (
+              <option key={f} value={f}>
+                {f}
+              </option>
+            ))}
+          </select>
+
+          {/* Passenger dropdown */}
+          <label style={styles.label}>Passenger</label>
+          <select
+            style={styles.input}
+            value={passengerName}
+            onChange={(e) => setPassengerName(e.target.value)}
+            disabled={availablePassengers.length === 0}
+          >
+            <option value="">
+              {availablePassengers.length === 0
+                ? "All demo passengers checked in"
+                : "Select a passenger"}
+            </option>
+            {availablePassengers.map((p) => (
+              <option key={p} value={p}>
+                {p}
+              </option>
+            ))}
+          </select>
+
+          {/* Seat dropdown – with your new logic */}
+          <label style={styles.label}>Seat</label>
+          <select
+            style={styles.input}
+            value={seat}
+            onChange={(e) => setSeat(e.target.value as SeatType)}
+            disabled={!flightId || availableSeatsForFlight.length === 0}
+          >
+            {!flightId ? (
+              <option value="">Select a seat</option>
+            ) : availableSeatsForFlight.length === 0 ? (
+              <option value="">No seats available</option>
+            ) : (
+              <>
+                <option value="">Select a seat</option>
+                {availableSeatsForFlight.map((s) => (
+                  <option key={s} value={s}>
+                    {s}
+                  </option>
+                ))}
+              </>
+            )}
+          </select>
+
+          <button style={styles.primaryButton} disabled={loading}>
+            {loading ? "Checking in..." : "Check In"}
+          </button>
+        </form>
+
+        {message && (
+          <div style={styles.successBox}>
+            <h3 style={styles.feedbackTitle}>Success</h3>
+            <p style={styles.feedbackText}>{message}</p>
+          </div>
+        )}
+
+        {error && (
+          <div style={styles.errorBox}>
+            <h3 style={styles.feedbackTitle}>Error</h3>
+            <p style={styles.feedbackText}>{error}</p>
+          </div>
+        )}
+      </section>
+
+      {/* Reservation list card */}
+      <section style={styles.card}>
+        <div style={styles.cardHeaderRow}>
+          <h2 style={styles.cardTitle}>Current Check-Ins</h2>
+          {allTestPassengersCheckedIn && (
+            <button
+              type="button"
+              style={styles.secondaryButton}
+              onClick={handleReset}
+              disabled={loading}
+            >
+              Reset demo
+            </button>
+          )}
+        </div>
+
+        {reservations.length === 0 ? (
+          <p style={styles.emptyState}>
+            No check-ins yet. Start by selecting a flight and passenger.
+          </p>
+        ) : (
+          <div style={styles.tableWrapper}>
+            <table style={styles.table}>
+              <thead>
+                <tr>
+                  <th>Flight</th>
+                  <th>Passenger</th>
+                  <th>Seat</th>
+                  <th>Checked In</th>
+                </tr>
+              </thead>
+              <tbody>
+                {reservations.map((r) => (
+                  <tr key={r.id}>
+                    <td>{r.flight_id}</td>
+                    <td>{r.passenger_name}</td>
+                    <td>{r.seat}</td>
+                    <td>{new Date(r.created_at).toLocaleTimeString()}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </section>
+    </main>
+  </div>
   );
 }
 
 const styles: { [key: string]: React.CSSProperties } = {
-  container: {
+  appShell: {
+    minHeight: "100vh",
+    margin: 0,
+    padding: "16px",
+    background:
+      "radial-gradient(circle at top, #1d4ed8 0, #020617 40%, #000 100%)",
+    color: "#f9fafb",
     fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, sans-serif",
-    padding: "20px",
-    maxWidth: "480px",
-    margin: "0 auto",
-    color: "#fff",
+    display: "flex",
+    flexDirection: "column",
+  },
+  appHeader: {
+    display: "flex",
+    alignItems: "center",
+    gap: "12px",
+    marginBottom: "12px",
+  },
+  brandBadge: {
+    padding: "10px 14px",
+    borderRadius: "999px",
+    background: "rgba(15,23,42,0.8)",
+    border: "1px solid rgba(148,163,184,0.6)",
+    fontSize: "13px",
+    letterSpacing: "0.08em",
+    textTransform: "uppercase",
+  },
+  headerTextBlock: {
+    display: "flex",
+    flexDirection: "column",
   },
   title: {
-    textAlign: "center",
-    marginBottom: "24px",
+    fontSize: "22px",
+    margin: 0,
+    fontWeight: 600,
+  },
+  subtitle: {
+    margin: 0,
+    marginTop: "2px",
+    fontSize: "13px",
+    color: "#cbd5f5",
+  },
+  main: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "16px",
+    marginTop: "8px",
+  },
+  card: {
+    background: "rgba(15,23,42,0.92)",
+    borderRadius: "18px",
+    padding: "16px 16px 18px",
+    boxShadow: "0 18px 40px rgba(0,0,0,0.75)",
+    border: "1px solid rgba(148,163,184,0.35)",
+    backdropFilter: "blur(12px)",
+  },
+  cardTitle: {
+    margin: 0,
+    marginBottom: "8px",
+    fontSize: "16px",
+    fontWeight: 600,
+  },
+  cardHeaderRow: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    gap: "8px",
+    marginBottom: "8px",
   },
   form: {
     display: "flex",
     flexDirection: "column",
-    gap: "12px",
+    gap: "10px",
+    marginTop: "4px",
   },
   label: {
-    fontWeight: 600,
+    fontSize: "13px",
+    fontWeight: 500,
+    color: "#e5e7eb",
   },
   input: {
-    padding: "10px",
-    borderRadius: "6px",
-    border: "1px solid #555",
-    fontSize: "16px",
-    backgroundColor: "#111",
-    color: "#fff",
+    padding: "10px 12px",
+    borderRadius: "10px",
+    border: "1px solid rgba(55,65,81,0.9)",
+    fontSize: "14px",
+    backgroundColor: "rgba(15,23,42,0.95)",
+    color: "#f9fafb",
+    outline: "none",
+    width: "100%",
   },
-  button: {
-    padding: "12px",
-    borderRadius: "6px",
+  primaryButton: {
+    padding: "11px 14px",
+    borderRadius: "999px",
     border: "none",
-    background: "#0070f3",
-    color: "#fff",
-    fontSize: "16px",
+    background:
+      "linear-gradient(135deg, #3b82f6 0%, #22c55e 50%, #06b6d4 100%)",
+    color: "#f9fafb",
+    fontSize: "15px",
+    fontWeight: 600,
     cursor: "pointer",
-    marginTop: "8px",
+    marginTop: "6px",
+    boxShadow: "0 12px 25px rgba(59,130,246,0.4)",
+  },
+  secondaryButton: {
+    padding: "7px 12px",
+    borderRadius: "999px",
+    border: "1px solid rgba(148,163,184,0.8)",
+    background: "rgba(15,23,42,0.9)",
+    color: "#e5e7eb",
+    fontSize: "13px",
+    cursor: "pointer",
   },
   successBox: {
-    background: "#173b2c",
-    border: "1px solid #25a56a",
-    padding: "16px",
-    borderRadius: "8px",
-    marginTop: "16px",
+    background: "rgba(22,163,74,0.15)",
+    border: "1px solid rgba(34,197,94,0.6)",
+    padding: "10px 12px",
+    borderRadius: "12px",
+    marginTop: "10px",
   },
   errorBox: {
-    background: "#3b1111",
-    border: "1px solid #ff9999",
-    padding: "16px",
-    borderRadius: "8px",
-    marginTop: "16px",
+    background: "rgba(127,29,29,0.25)",
+    border: "1px solid rgba(248,113,113,0.7)",
+    padding: "10px 12px",
+    borderRadius: "12px",
+    marginTop: "10px",
+  },
+  feedbackTitle: {
+    margin: 0,
+    marginBottom: "4px",
+    fontSize: "13px",
+    fontWeight: 600,
+  },
+  feedbackText: {
+    margin: 0,
+    fontSize: "13px",
   },
   tableWrapper: {
-    marginTop: "24px",
+    overflowX: "auto",
+    marginTop: "6px",
   },
   table: {
     width: "100%",
     borderCollapse: "collapse",
+    fontSize: "13px",
+  },
+  emptyState: {
+    fontSize: "13px",
+    color: "#9ca3af",
+    marginTop: "6px",
   },
 };
 

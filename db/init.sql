@@ -21,3 +21,12 @@ CREATE TABLE IF NOT EXISTS reservations (
     CONSTRAINT uq_res_flight_seat UNIQUE (flight_id, seat),
     CONSTRAINT uq_res_passenger UNIQUE (passenger_name)
 );
+
+
+ALTER TABLE reservations
+  ADD CONSTRAINT reservations_unique_flight_seat
+    UNIQUE (flight_id, seat);
+
+ALTER TABLE reservations
+  ADD CONSTRAINT reservations_unique_flight_passenger
+    UNIQUE (flight_id, passenger_name);
