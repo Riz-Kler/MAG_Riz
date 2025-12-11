@@ -1,50 +1,19 @@
 import { Router } from "express";
-import {
-  getArrivals,
-  getDepartures,
-  getCheckInView
-} from "../services/flights/flightService";
+import { getFlights } from "../services/flights/flightService";
 
 const router = Router();
 
-// GET /api/flights/live  -> { arrivals, departures }
-router.get("/live", async (_req, res, next) => {
+/**
+ * GET /api/flights?direction=arrival|departure
+ */
+router.get("/", async (req, res) => {
   try {
-    const [arrivals, departures] = await Promise.all([
-      getArrivals(),
-      getDepartures()
-    ]);
-
-    res.json({ arrivals, departures });
+    const direction = req.query.direction as "arrival" | "departure" | undefined;
+    const flights = await getFlights(direction);
+    res.json(flights);
   } catch (err) {
-    next(err);
-  }
-});
-
-router.get("/arrivals", async (_req, res, next) => {
-  try {
-    const arrivals = await getArrivals();
-    res.json(arrivals);
-  } catch (err) {
-    next(err);
-  }
-});
-
-router.get("/departures", async (_req, res, next) => {
-  try {
-    const departures = await getDepartures();
-    res.json(departures);
-  } catch (err) {
-    next(err);
-  }
-});
-
-router.get("/checkin", async (_req, res, next) => {
-  try {
-    const items = await getCheckInView();
-    res.json(items);
-  } catch (err) {
-    next(err);
+    console.error("Error in /api/flights:", err);
+    res.status(500).json({ error: "Failed to load flights" });
   }
 });
 
