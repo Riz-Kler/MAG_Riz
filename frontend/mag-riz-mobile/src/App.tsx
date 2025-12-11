@@ -5,6 +5,7 @@ const API_BASE =
   import.meta.env.VITE_API_BASE_URL ?? "http://localhost:4000";
 
 type SeatType = "Window" | "Middle" | "Aisle";
+type Theme = "festive" | "classic";
 
 interface Reservation {
   id: number;
@@ -14,7 +15,16 @@ interface Reservation {
   created_at: string;
 }
 
-const FLIGHTS = ["MAN1001", "MAN1002", "MAN1003", "MAN2001", "MAN2002",   "MAN2003", "MAN2004"];
+const FLIGHTS = [
+  "MAN1001",
+  "MAN1002",
+  "MAN1003",
+  "MAN2001",
+  "MAN2002",
+  "MAN2003",
+  "MAN2004",
+];
+
 const PASSENGERS = [
   "Riz Kler",
   "Alice Jones",
@@ -41,6 +51,13 @@ const PASSENGERS = [
 const SEATS: SeatType[] = ["Window", "Middle", "Aisle"];
 
 function App() {
+  // THEME (new – purely visual)
+  const [theme, setTheme] = useState<Theme>("festive");
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+  }, [theme]);
+
+  // CHECK-IN STATE (unchanged)
   const [flightId, setFlightId] = useState("");
   const [passengerName, setPassengerName] = useState("");
   const [seat, setSeat] = useState<SeatType>("Window");
@@ -92,15 +109,15 @@ function App() {
         throw new Error("Please select flight, passenger and seat");
       }
 
-     const res = await fetch(`${API_BASE}/api/reservations`, {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-    passenger_name: passengerName,
-    flight_id: flightId,
-    seat: seat,
-  }),
-});
+      const res = await fetch(`${API_BASE}/api/reservations`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          passenger_name: passengerName,
+          flight_id: flightId,
+          seat: seat,
+        }),
+      });
 
       if (!res.ok) {
         const text = await res.text();
@@ -151,150 +168,184 @@ function App() {
     reservations.length >= PASSENGERS.length;
 
   return (
-  <div style={styles.appShell}>
-    <div style={styles.appHeader}>
-      <div style={styles.brandBadge}>MAG Riz</div>
-      <div style={styles.headerTextBlock}>
-        <h1 style={styles.title}>Mobile Check-In</h1>
-        <p style={styles.subtitle}>Select your flight, passenger, and seat.</p>
-      </div>
-    </div>
+    <div style={styles.appShell}>
+      {/* snow + glow sits behind content, controlled by data-theme in CSS */}
 
-    <main style={styles.main}>
-      {/* Check-in card */}
-      <section style={styles.card}>
-        <h2 style={styles.cardTitle}>Check-In</h2>
+      <div style={styles.appHeader}>
+        <div style={styles.brandBadge}>✈ MAG RIZ • T3</div>
 
-        <form onSubmit={handleSubmit} style={styles.form}>
-          {/* Flight dropdown */}
-          <label style={styles.label}>Flight</label>
-          <select
-            style={styles.input}
-            value={flightId}
-            onChange={(e) => {
-              setFlightId(e.target.value);
-              setSeat(""); // reset seat on flight change
-            }}
-          >
-            <option value="">Select a flight</option>
-            {FLIGHTS.map((f) => (
-              <option key={f} value={f}>
-                {f}
-              </option>
-            ))}
-          </select>
-
-          {/* Passenger dropdown */}
-          <label style={styles.label}>Passenger</label>
-          <select
-            style={styles.input}
-            value={passengerName}
-            onChange={(e) => setPassengerName(e.target.value)}
-            disabled={availablePassengers.length === 0}
-          >
-            <option value="">
-              {availablePassengers.length === 0
-                ? "All demo passengers checked in"
-                : "Select a passenger"}
-            </option>
-            {availablePassengers.map((p) => (
-              <option key={p} value={p}>
-                {p}
-              </option>
-            ))}
-          </select>
-
-          {/* Seat dropdown – with your new logic */}
-          <label style={styles.label}>Seat</label>
-          <select
-            style={styles.input}
-            value={seat}
-            onChange={(e) => setSeat(e.target.value as SeatType)}
-            disabled={!flightId || availableSeatsForFlight.length === 0}
-          >
-            {!flightId ? (
-              <option value="">Select a seat</option>
-            ) : availableSeatsForFlight.length === 0 ? (
-              <option value="">No seats available</option>
-            ) : (
-              <>
-                <option value="">Select a seat</option>
-                {availableSeatsForFlight.map((s) => (
-                  <option key={s} value={s}>
-                    {s}
-                  </option>
-                ))}
-              </>
-            )}
-          </select>
-
-          <button style={styles.primaryButton} disabled={loading}>
-            {loading ? "Checking in..." : "Check In"}
-          </button>
-        </form>
-
-        {message && (
-          <div style={styles.successBox}>
-            <h3 style={styles.feedbackTitle}>Success</h3>
-            <p style={styles.feedbackText}>{message}</p>
-          </div>
-        )}
-
-        {error && (
-          <div style={styles.errorBox}>
-            <h3 style={styles.feedbackTitle}>Error</h3>
-            <p style={styles.feedbackText}>{error}</p>
-          </div>
-        )}
-      </section>
-
-      {/* Reservation list card */}
-      <section style={styles.card}>
-        <div style={styles.cardHeaderRow}>
-          <h2 style={styles.cardTitle}>Current Check-Ins</h2>
-          {allTestPassengersCheckedIn && (
-            <button
-              type="button"
-              style={styles.secondaryButton}
-              onClick={handleReset}
-              disabled={loading}
-            >
-              Reset demo
-            </button>
-          )}
+        <div style={styles.headerTextBlock}>
+          <h1 style={styles.title}>
+            Mobile Check-In{" "}
+            {theme === "festive" ? <span aria-hidden>🎄</span> : null}
+          </h1>
+          <p style={styles.subtitle}>
+            Festive demo — select your flight, passenger and seat.
+          </p>
         </div>
 
-        {reservations.length === 0 ? (
-          <p style={styles.emptyState}>
-            No check-ins yet. Start by selecting a flight and passenger.
-          </p>
-        ) : (
-          <div style={styles.tableWrapper}>
-            <table style={styles.table}>
-              <thead>
-                <tr>
-                  <th>Flight</th>
-                  <th>Passenger</th>
-                  <th>Seat</th>
-                  <th>Checked In</th>
-                </tr>
-              </thead>
-              <tbody>
-                {reservations.map((r) => (
-                  <tr key={r.id}>
-                    <td>{r.flight_id}</td>
-                    <td>{r.passenger_name}</td>
-                    <td>{r.seat}</td>
-                    <td>{new Date(r.created_at).toLocaleTimeString()}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+        <button
+          type="button"
+          style={styles.themeToggle}
+          onClick={() =>
+            setTheme((prev) => (prev === "festive" ? "classic" : "festive"))
+          }
+        >
+          <span
+            style={{
+              opacity: theme === "festive" ? 1 : 0.35,
+              transform: "translateY(1px)",
+            }}
+          >
+            🎄
+          </span>
+          <span
+            style={{
+              fontSize: "11px",
+              textTransform: "uppercase",
+              letterSpacing: "0.06em",
+            }}
+          >
+            {theme === "festive" ? "Festive" : "Classic"}
+          </span>
+        </button>
+      </div>
+
+      <main style={styles.main}>
+        {/* Check-in card */}
+        <section style={styles.card}>
+          <h2 style={styles.cardTitle}>Check-In</h2>
+
+          <form onSubmit={handleSubmit} style={styles.form}>
+            {/* Flight dropdown */}
+            <label style={styles.label}>Flight</label>
+            <select
+              style={styles.input}
+              value={flightId}
+              onChange={(e) => {
+                setFlightId(e.target.value);
+                setSeat(""); // reset seat on flight change
+              }}
+            >
+              <option value="">Select a flight</option>
+              {FLIGHTS.map((f) => (
+                <option key={f} value={f}>
+                  {f}
+                </option>
+              ))}
+            </select>
+
+            {/* Passenger dropdown */}
+            <label style={styles.label}>Passenger</label>
+            <select
+              style={styles.input}
+              value={passengerName}
+              onChange={(e) => setPassengerName(e.target.value)}
+              disabled={availablePassengers.length === 0}
+            >
+              <option value="">
+                {availablePassengers.length === 0
+                  ? "All demo passengers checked in"
+                  : "Select a passenger"}
+              </option>
+              {availablePassengers.map((p) => (
+                <option key={p} value={p}>
+                  {p}
+                </option>
+              ))}
+            </select>
+
+            {/* Seat dropdown – existing logic, unchanged */}
+            <label style={styles.label}>Seat</label>
+            <select
+              style={styles.input}
+              value={seat}
+              onChange={(e) => setSeat(e.target.value as SeatType)}
+              disabled={!flightId || availableSeatsForFlight.length === 0}
+            >
+              {!flightId ? (
+                <option value="">Select a seat</option>
+              ) : availableSeatsForFlight.length === 0 ? (
+                <option value="">No seats available</option>
+              ) : (
+                <>
+                  <option value="">Select a seat</option>
+                  {availableSeatsForFlight.map((s) => (
+                    <option key={s} value={s}>
+                      {s}
+                    </option>
+                  ))}
+                </>
+              )}
+            </select>
+
+            <button style={styles.primaryButton} disabled={loading}>
+              {loading ? "Checking in..." : "Check In"}
+            </button>
+          </form>
+
+          {message && (
+            <div style={styles.successBox}>
+              <h3 style={styles.feedbackTitle}>Success</h3>
+              <p style={styles.feedbackText}>{message}</p>
+            </div>
+          )}
+
+          {error && (
+            <div style={styles.errorBox}>
+              <h3 style={styles.feedbackTitle}>Error</h3>
+              <p style={styles.feedbackText}>{error}</p>
+            </div>
+          )}
+        </section>
+
+        {/* Reservation list card */}
+        <section style={styles.card}>
+          <div style={styles.cardHeaderRow}>
+            <h2 style={styles.cardTitle}>Current Check-Ins</h2>
+            {allTestPassengersCheckedIn && (
+              <button
+                type="button"
+                style={styles.secondaryButton}
+                onClick={handleReset}
+                disabled={loading}
+              >
+                Reset demo
+              </button>
+            )}
           </div>
-        )}
-      </section>
-    </main>
-  </div>
+
+          {reservations.length === 0 ? (
+            <p style={styles.emptyState}>
+              No check-ins yet. Start by selecting a flight and passenger.
+            </p>
+          ) : (
+            <div style={styles.tableWrapper}>
+              <table style={styles.table}>
+                <thead>
+                  <tr>
+                    <th>Flight</th>
+                    <th>Passenger</th>
+                    <th>Seat</th>
+                    <th>Checked In</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {reservations.map((r) => (
+                    <tr key={r.id}>
+                      <td>{r.flight_id}</td>
+                      <td>{r.passenger_name}</td>
+                      <td>{r.seat}</td>
+                      <td>{new Date(r.created_at).toLocaleTimeString()}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </section>
+      </main>
+    </div>
   );
 }
 
@@ -304,11 +355,16 @@ const styles: { [key: string]: React.CSSProperties } = {
     margin: 0,
     padding: "16px",
     background:
-      "radial-gradient(circle at top, #1d4ed8 0, #020617 40%, #000 100%)",
+      "radial-gradient(circle at top, #1d4ed8 0, #020617 45%, #000 100%)",
     color: "#f9fafb",
     fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, sans-serif",
     display: "flex",
     flexDirection: "column",
+    maxWidth: 520,
+    width: "100%",
+    borderRadius: 32,
+    boxShadow: "0 32px 60px rgba(0,0,0,0.85)",
+    border: "1px solid rgba(148,163,184,0.4)",
   },
   appHeader: {
     display: "flex",
@@ -319,15 +375,17 @@ const styles: { [key: string]: React.CSSProperties } = {
   brandBadge: {
     padding: "10px 14px",
     borderRadius: "999px",
-    background: "rgba(15,23,42,0.8)",
+    background: "rgba(15,23,42,0.9)",
     border: "1px solid rgba(148,163,184,0.6)",
     fontSize: "13px",
     letterSpacing: "0.08em",
     textTransform: "uppercase",
+    whiteSpace: "nowrap",
   },
   headerTextBlock: {
     display: "flex",
     flexDirection: "column",
+    flex: 1,
   },
   title: {
     fontSize: "22px",
@@ -340,6 +398,19 @@ const styles: { [key: string]: React.CSSProperties } = {
     fontSize: "13px",
     color: "#cbd5f5",
   },
+  themeToggle: {
+    marginLeft: "auto",
+    borderRadius: "999px",
+    border: "1px solid rgba(148,163,184,0.8)",
+    background: "rgba(15,23,42,0.95)",
+    color: "#f9fafb",
+    padding: "4px 10px",
+    fontSize: "12px",
+    display: "flex",
+    alignItems: "center",
+    gap: "6px",
+    cursor: "pointer",
+  },
   main: {
     display: "flex",
     flexDirection: "column",
@@ -347,7 +418,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     marginTop: "8px",
   },
   card: {
-    background: "rgba(15,23,42,0.92)",
+    background: "rgba(15,23,42,0.96)",
     borderRadius: "18px",
     padding: "16px 16px 18px",
     boxShadow: "0 18px 40px rgba(0,0,0,0.75)",
@@ -393,13 +464,13 @@ const styles: { [key: string]: React.CSSProperties } = {
     borderRadius: "999px",
     border: "none",
     background:
-      "linear-gradient(135deg, #3b82f6 0%, #22c55e 50%, #06b6d4 100%)",
+      "linear-gradient(135deg, #22c55e 0%, #f97316 40%, #ef4444 100%)",
     color: "#f9fafb",
     fontSize: "15px",
     fontWeight: 600,
     cursor: "pointer",
     marginTop: "6px",
-    boxShadow: "0 12px 25px rgba(59,130,246,0.4)",
+    boxShadow: "0 12px 25px rgba(248,113,113,0.35)",
   },
   secondaryButton: {
     padding: "7px 12px",

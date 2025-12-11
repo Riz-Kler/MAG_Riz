@@ -1,20 +1,30 @@
-import axios from "axios";
+const API_BASE =
+  import.meta.env.VITE_API_BASE_URL ?? "http://localhost:4000";
 
-const api = axios.create({
-  baseURL: "/api", // assuming backend is proxied or same origin
-});
-
-export async function fetchArrivals() {
-  const res = await api.get("/flights/arrivals");
-  return res.data;
+export interface Flight {
+  id: string;
+  direction: "arrival" | "departure";
+  airline: string;
+  callsign: string;
+  origin: string;
+  destination: string;
+  scheduledTime: string; // ISO string
+  status: string;
+  checkInDesk?: string; // departures only
 }
 
-export async function fetchDepartures() {
-  const res = await api.get("/flights/departures");
-  return res.data;
+async function fetchJson(url: string): Promise<Flight[]> {
+  const res = await fetch(url);
+  if (!res.ok) {
+    throw new Error(`Failed to fetch flights (${res.status})`);
+  }
+  return res.json();
 }
 
-export async function fetchCheckInView() {
-  const res = await api.get("/flights/checkin");
-  return res.data;
+export function fetchArrivals(): Promise<Flight[]> {
+  return fetchJson(`${API_BASE}/api/flights?direction=arrival`);
+}
+
+export function fetchDepartures(): Promise<Flight[]> {
+  return fetchJson(`${API_BASE}/api/flights?direction=departure`);
 }
